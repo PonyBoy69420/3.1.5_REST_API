@@ -5,7 +5,7 @@
     <title>New user</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/admin/users/{id}(id=${user.getId()})}" th:object="${user}">
+<form th:method="POST" th:action="@{/admin/users/create-new}" th:object="${user}">
     <label for="username">
         Enter name:
     </label>
@@ -19,13 +19,32 @@
     <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</div>
     </br>
     <label for="email">
-        Enter name:
+        Enter mail:
     </label>
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
     </br>
+    <label for="password">
+        Enter password:
+    </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
+    </br>
+    <label>Roles:
+        <input type="checkbox" name="roles"
+               th:each="role : ${allRoles}"
+               th:text="${role.name}"
+               th:value="${role.id}"
+               th:field="*{roles}"
+        />
+    </label>
+    </br>
 
     <input type="submit" value="Create"/>
+</form>
+<br/>
+<form name="logoutForm" th:action = "@{/logout}" method="post" >
+    <input type="submit" value="Sign Out"/>
 </form>
 </body>
 </html>
