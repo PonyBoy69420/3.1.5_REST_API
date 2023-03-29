@@ -2,11 +2,13 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.validation.constraints.Email;
@@ -33,19 +35,28 @@ public class User implements UserDetails {
     private String lastName;
     @NotNull
     @Email(message = "Not valid email")
-    @Column(name = "email")
+    @Column(name = "email",unique=true)
     private String email;
     @NotNull
     @NotEmpty(message = "Enter your password")
     @Size(min = 6, max=30,message = "password must be between 6 and 30")
     @Column(name="password")
     private String password;
+    @Range(min=0,max=120,message = "Age must be between 0 and 120")
+    @Column(name="age")
+    private int age;
 
     @NotNull
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
+
+    public String getRolesName(){
+        List<String> rolesName = new ArrayList<>();
+        this.getRoles().forEach(role -> rolesName.add(role.getName()));
+        return rolesName.toString().replace("[","").replace("]","");
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

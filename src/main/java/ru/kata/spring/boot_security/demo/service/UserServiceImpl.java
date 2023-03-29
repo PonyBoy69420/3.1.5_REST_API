@@ -12,9 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleDAO;
 import ru.kata.spring.boot_security.demo.repository.UserDAO;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,11 +24,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
     private UserDAO userDao;
+    private RoleDAO roleDao;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDAO userDao, @Lazy PasswordEncoder passwordEncoder){
+    public UserServiceImpl(RoleDAO roleDao,UserDAO userDao, @Lazy PasswordEncoder passwordEncoder){
 
+        this.roleDao=roleDao;
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
     }
@@ -36,11 +40,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userDao.findByUsername(username);
     }
 
+    @Override
+    public User findByEmail(String email){return userDao.findByEmail(email);}
+
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+        User user = findByEmail(username);
         if(user==null){
             throw new UsernameNotFoundException(String.format("User not found"));
         }
@@ -49,6 +56,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             mapRolesAuthorities(user.getRoles()));
     }
 
+
+
     private Collection<? extends GrantedAuthority> mapRolesAuthorities(Collection<Role> roles){
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
@@ -56,6 +65,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        List<Role> userRoles = new ArrayList<>();
+        user.getRoles().stream().forEach(S->{userRoles.add(roleDao.getRoleByName(S.getName()));});
+        user.setRoles(userRoles);
         userDao.save(user);
     }
 
@@ -66,14 +78,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(Long id,User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        List<Role> userRoles = new ArrayList<>();
+        user.getRoles().stream().forEach(S->{userRoles.add(roleDao.getRoleByName(S.getName()));});
+        user.setRoles(userRoles);
+        user.setId(id);
         userDao.save(user);
     }
 
     @Override
     public User getUserById(Long id) {
-        return userDao.getOne(id);
+        return userDao.findById(id).get();
     }
 
     @Override
