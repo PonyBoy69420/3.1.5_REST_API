@@ -49,10 +49,14 @@ async function editUser(){
         })}
     console.log(editId.value,editUserName.value,editLastName.value,editEmail.value,editAge.value,editPassword.value,roles);
     await fetch('/admin/api/users/update/'+editId.value,method)
+        .catch(err=>{
+            console.log(err.response());
+        })
     .then(function(response){
-        console.log(response);
+        console.log(response.text());
         getAllUsers();
         $('#edit-form-close-button').click();
 
     })
+
 }

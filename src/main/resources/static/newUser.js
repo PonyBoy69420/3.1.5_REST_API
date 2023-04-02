@@ -28,8 +28,12 @@ async function postUser(){
             roles: roles
         })}
     await fetch('/admin/api/users/create-new',method)
+        .catch(err=>{
+            console.log(err.message);
+        })
         .then(function(response){
-            console.log(response);
+            console.log(response.text());
             getAllUsers();
         })
+
 }

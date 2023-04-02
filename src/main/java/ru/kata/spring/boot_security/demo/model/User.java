@@ -35,6 +35,7 @@ public class User implements UserDetails {
     private String lastName;
     @NotNull
     @Email(message = "Not valid email")
+    @Size(min=2,message = "Enter your email")
     @Column(name = "email",unique=true)
     private String email;
     @NotNull
@@ -42,7 +43,8 @@ public class User implements UserDetails {
     @Size(min = 6, max=30,message = "password must be between 6 and 30")
     @Column(name="password")
     private String password;
-    @Range(min=0,max=120,message = "Age must be between 0 and 120")
+    @NotNull
+    @Range(min=5,max=120,message = "Age must be between 0 and 120")
     @Column(name="age")
     private int age;
 
