@@ -8,7 +8,7 @@ const deleteAge = document.getElementById('delete-age-field');
 
 
 async function editDeleteForm(id){
-    let userInfo = await fetch('/admin/api/admin/'+id);
+    let userInfo = await fetch('/admin/api/users/'+id);
     if(userInfo.ok){
         let letUserData = await userInfo.json().then(async user=>{
             deleteId.value=user.id;
@@ -24,7 +24,7 @@ async function editDeleteForm(id){
 }
 
 async function deleteUser(){
-    await fetch('/admin/api/users/delete/'+deleteId.value,{
+    await fetch('/admin/api/users/'+deleteId.value,{
         method:'DELETE',
         headers:{
             "Content-Type":"application/json"

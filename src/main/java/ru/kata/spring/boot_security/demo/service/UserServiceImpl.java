@@ -7,18 +7,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.kata.spring.boot_security.demo.model.CurrentUser;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleDAO;
 import ru.kata.spring.boot_security.demo.repository.UserDAO;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,20 +38,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userDao.findByUsername(username);
     }
 
+
     @Override
     public User findByEmail(String email){return userDao.findByEmail(email);}
 
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CurrentUser loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByEmail(username);
         if(user==null){
             throw new UsernameNotFoundException(String.format("User not found"));
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),
-            mapRolesAuthorities(user.getRoles()));
+        return new CurrentUser(user);
     }
 
 
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        List<Role> userRoles = new ArrayList<>();
+        Set<Role> userRoles = new HashSet<>();
         user.getRoles().stream().forEach(S->{userRoles.add(roleDao.getRoleByName(S.getName()));});
         user.setRoles(userRoles);
         userDao.save(user);
@@ -79,8 +77,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public void updateUser(Long id,User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        List<Role> userRoles = new ArrayList<>();
+        String newPassword = user.getPassword();
+        if(!(getUserById(user.getId()).getPassword().equals(newPassword))){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        Set<Role> userRoles = new HashSet<>();
         user.getRoles().stream().forEach(S->{userRoles.add(roleDao.getRoleByName(S.getName()));});
         user.setRoles(userRoles);
         user.setId(id);

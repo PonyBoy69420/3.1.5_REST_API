@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.kata.spring.boot_security.demo.model.CurrentUser;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -27,7 +28,7 @@ public class PrincipalController {
     @CrossOrigin
     @GetMapping("api/principal")
     public ResponseEntity<User> getPrincipal(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new ResponseEntity<>(userService.findByUsername(authentication.getName()), HttpStatus.OK);
+        CurrentUser user = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new ResponseEntity<>(userService.findByEmail(user.getEmail()), HttpStatus.OK);
     }
 }

@@ -28,7 +28,7 @@ public class AdminController {
 
 
     @CrossOrigin
-    @PostMapping("users/create-new")
+    @PostMapping("users")
     public ResponseEntity<String> createUser(@RequestBody @Valid User user){
         try{
             userService.createUser(user);
@@ -39,14 +39,14 @@ public class AdminController {
     }
 
     @CrossOrigin
-    @DeleteMapping("users/delete/{id}")
+    @DeleteMapping("users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id){
         userService.deleteUser(id);
         return new ResponseEntity<>("User was deleted",HttpStatus.OK);
     }
 
     @CrossOrigin
-    @PutMapping("users/update/{id}")
+    @PutMapping("users/{id}")
     public ResponseEntity<String> update(@RequestBody @Valid User user,@PathVariable Long id){
         try{
             userService.updateUser(id,user);
@@ -57,13 +57,13 @@ public class AdminController {
     }
 
     @CrossOrigin
-    @GetMapping("/admin")
+    @GetMapping("users")
     public ResponseEntity<List<User>> getAdminPage(){
         return new ResponseEntity<>(userService.listUsers(),HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping("/admin/{id}")
+    @GetMapping("users/{id}")
     public ResponseEntity<User> getAdminPage(@PathVariable Long id){
         return new ResponseEntity<>(userService.getUserById(id),HttpStatus.OK);
     }
