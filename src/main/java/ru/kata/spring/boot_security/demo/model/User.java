@@ -19,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @Entity
 @Table(name= "User",schema = "hib")
-public class User implements UserDetails {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -76,33 +76,6 @@ public class User implements UserDetails {
         return rolesName.toString().replace("[","").replace("]","");
     }
 
-    @Transactional
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        this.getRoles().forEach(role->authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return authorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
 
 //    @Enumerated(value=EnumType.STRING)

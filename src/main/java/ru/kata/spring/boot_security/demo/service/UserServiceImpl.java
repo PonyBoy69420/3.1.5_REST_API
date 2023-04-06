@@ -55,11 +55,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
 
-
-    private Collection<? extends GrantedAuthority> mapRolesAuthorities(Collection<Role> roles){
-        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
-    }
-
     @Override
     public void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
