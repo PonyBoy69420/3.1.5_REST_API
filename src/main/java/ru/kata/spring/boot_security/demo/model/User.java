@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.kata.spring.boot_security.demo.repository.RoleDAO;
+import ru.kata.spring.boot_security.demo.repository.UserDAO;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -86,12 +88,10 @@ public class User implements UserDetails{
         return rolesName.toString().replace("[","").replace("]","");
     }
 
-    @Transactional
+
     @Override
-    public Set<GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities =  new HashSet<>();
-        this.getRoles().stream().forEach(s-> authorities.add(new SimpleGrantedAuthority(s.getAuthority())));
-        return authorities;
+    public Set<Role> getAuthorities() {
+        return roles;
     }
 
     @Override

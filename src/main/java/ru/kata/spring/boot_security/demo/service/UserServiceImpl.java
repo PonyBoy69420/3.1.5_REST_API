@@ -2,15 +2,10 @@ package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import ru.kata.spring.boot_security.demo.model.CurrentUser;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleDAO;
@@ -18,7 +13,6 @@ import ru.kata.spring.boot_security.demo.repository.UserDAO;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -51,7 +45,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(user==null){
             throw new UsernameNotFoundException(String.format("User not found"));
         }
-
+        System.out.println(user.getRoles());
         return user;
     }
 
