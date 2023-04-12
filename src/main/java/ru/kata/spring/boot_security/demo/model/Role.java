@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     @JsonIgnore
+    @Transactional
     public String getAuthority() {
         return getName();
     }

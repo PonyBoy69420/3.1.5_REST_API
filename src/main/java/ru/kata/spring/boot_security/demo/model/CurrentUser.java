@@ -26,29 +26,29 @@ public class CurrentUser extends User implements UserDetails {
         }
     }
 
-    @Transactional
-    @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-    
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    @Transactional
+//    @Override
+//    public Collection<GrantedAuthority> getAuthorities() {
+//        return authorities;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

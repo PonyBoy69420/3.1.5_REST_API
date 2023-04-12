@@ -28,7 +28,7 @@ public class PrincipalController {
     @CrossOrigin
     @GetMapping("api/principal")
     public ResponseEntity<User> getPrincipal(){
-        CurrentUser user = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new ResponseEntity<>(userService.findByEmail(user.getEmail()), HttpStatus.OK);
     }
 }
