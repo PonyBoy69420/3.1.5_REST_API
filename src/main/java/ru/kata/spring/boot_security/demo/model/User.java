@@ -71,24 +71,6 @@ public class User implements UserDetails{
 
     }
 
-    @Transactional
-    public Set<Role> getThisRoles(){
-        return this.roles;
-    }
-
-    public User(User user) {
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.roles = user.getRoles();
-    }
-
-    public String getRolesName(){
-        List<String> rolesName = new ArrayList<>();
-        this.getRoles().forEach(role -> rolesName.add(role.getName()));
-        return rolesName.toString().replace("[","").replace("]","");
-    }
-
-
     @Override
     public Set<Role> getAuthorities() {
         return roles;
@@ -113,14 +95,4 @@ public class User implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
-
-
-
-//    @Enumerated(value=EnumType.STRING)
-//    @Column(name="role")
-//    private String role;
-//    @Enumerated(value=EnumType.STRING)
-//    @Column(name="status")
-//    private String status;
-
 }

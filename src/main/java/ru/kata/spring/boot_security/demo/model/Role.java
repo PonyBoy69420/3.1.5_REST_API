@@ -34,12 +34,8 @@ public class Role implements GrantedAuthority {
 
     @Override
     @JsonIgnore
-    @Transactional
     public String getAuthority() {
         return getName();
     }
 
-    public String getNameWithoutPrefix(){
-        return name.replace("ROLE_","");
-    }
 }
