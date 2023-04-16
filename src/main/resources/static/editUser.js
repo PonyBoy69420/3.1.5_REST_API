@@ -9,7 +9,7 @@ const editRoles = document.getElementById('select-for-roles-edit');
 
 
 async function editModalForm(id){
-    let userInfo = await fetch('/admin/api/users/'+id);
+    let userInfo = await fetch('/api/admin/users/'+id);
     if(userInfo.ok){
         let letUserData = await userInfo.json().then(async user=>{
             editId.value=user.id;
@@ -48,7 +48,7 @@ async function editUser(){
             roles: roles
         })}
     console.log(editId.value,editUserName.value,editLastName.value,editEmail.value,editAge.value,editPassword.value,roles);
-    await fetch('/admin/api/users/'+editId.value,method)
+    await fetch('/api/admin/users/'+editId.value,method)
         .catch(err=>{
             console.log(err.response());
         })

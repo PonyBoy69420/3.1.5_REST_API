@@ -27,7 +27,7 @@ async function postUser(){
             password: newUserPassword.value,
             roles: roles
         })}
-    await fetch('/admin/api/users',method)
+    await fetch('/api/admin/users',method)
         .catch(err=>{
             console.log(err.message);
         })

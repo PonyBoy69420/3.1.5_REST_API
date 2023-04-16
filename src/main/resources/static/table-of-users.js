@@ -1,5 +1,5 @@
 async function getAllUsers(){
-    let listUsers = await fetch('/admin/api/users');
+    let listUsers = await fetch('/api/admin/users');
     if(listUsers.ok){
         let table = document.getElementById('usersTable');
         let users = await listUsers.json();
